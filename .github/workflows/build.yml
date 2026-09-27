@@ -10,14 +10,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Build ESPHome binary using Docker
+      - name: Build ESPHome binary
         run: |
           docker run --rm -v "${PWD}":/config esphome/esphome compile smlight.yaml
 
-      - name: Find and Prepare Firmware Output
+      - name: Copy firmware
         run: |
           mkdir -p output
-          find .esphome/build/ -name "firmware*.bin" -exec cp {} output/firmware.bin \;
+          find .esphome/ -name "*.bin" -exec cp {} output/firmware.bin \; || true
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4

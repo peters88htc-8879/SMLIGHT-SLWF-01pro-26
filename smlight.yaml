@@ -2,13 +2,15 @@ esphome:
   name: smlight-ac
   friendly_name: Klimatizace Airwell
 
-# HW konfigurace pro ESP8266 (standardní čip v SLWF-01)
-esp8266:
-  board: esp12e
+esp32:
+  board: esp32-s3-devkitc-1
+  variant: esp32s3
+  framework:
+    type: esp-idf
 
 wifi:
-  ssid: "NÁZEV_VAŠÍ_WIFI"
-  password: "HESLO_VAŠÍ_WIFI"
+  ssid: "DOPLNTE_NAZEV_WIFI"
+  password: "DOPLNTE_HESLO_WIFI"
   ap:
     ssid: "AC-wifi-Airwell"
     password: "slwf01pro"
@@ -25,9 +27,8 @@ api:
 ota:
   - platform: esphome
 
-# UART komunikace s vnitřní deskou klimatizace Airwell / Midea
 uart:
-  tx_pin: GPIO1
+  tx_pin: GPIO11
   rx_pin: GPIO3
   baud_rate: 9600
 
@@ -37,7 +38,6 @@ climate:
     id: airwell_ac
     beeper: true
 
-# Virtuální spínač s HTTP endpointem pro spínání z FVE / SDG
 switch:
   - platform: template
     name: "Shelly Rele Ovladani"

@@ -24,7 +24,7 @@ jobs:
         run: |
           esphome compile smlight.yaml
 
-      - name: Prepare Output Directory
+      - name: Prepare Output
         run: |
           mkdir -p output
           find .esphome/ -name "*.bin" -exec cp {} output/firmware.bin \;

@@ -12,10 +12,15 @@ jobs:
 
       - name: Build ESPHome binary using Docker
         run: |
-          docker run --rm -v "${PWD}":/config -t esphome/esphome compile smlight.yaml
+          docker run --rm -v "${PWD}":/config esphome/esphome compile smlight.yaml
+
+      - name: Find and Prepare Firmware Output
+        run: |
+          mkdir -p output
+          find .esphome/build/ -name "firmware*.bin" -exec cp {} output/firmware.bin \;
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: firmware
-          path: .esphome/build/smlight-ac/.pioenvs/smlight-ac/firmware.bin
+          path: output/firmware.bin

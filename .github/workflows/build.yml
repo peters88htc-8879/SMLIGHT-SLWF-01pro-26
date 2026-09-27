@@ -10,14 +10,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Build ESPHome binary
-        uses: esphome/build-action@v2
-        with:
-          yaml_file: smlight.yaml
-          version: latest
+      - name: Build ESPHome binary using Docker
+        run: |
+          docker run --rm -v "${PWD}":/config -t esphome/esphome compile smlight.yaml
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: firmware
-          path: .esphome/build/smlight-ac/firmware.bin
+          path: .esphome/build/smlight-ac/.pioenvs/smlight-ac/firmware.bin

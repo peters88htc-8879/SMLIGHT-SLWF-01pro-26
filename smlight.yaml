@@ -1,0 +1,70 @@
+# Konfigurační program pro modul SMLIGHT SLWF-01 Pro (generace v2.1)
+# Firmware: ESPHome pro SDG monitoring přes HTTP REST API
+
+esphome:
+  name: smlight-ac
+  friendly_name: Klimatizace Airwell
+
+esp32:
+  board: esp32-s3-devkitc-1
+  framework:
+    type: esp-idf
+
+# --- PŘIPOJENÍ K VAŠÍ DOMÁCÍ WI-FI ---
+wifi:
+  ssid: "NÁZEV_VAŠÍ_WIFI"
+  password: "HESLO_VAŠÍ_WIFI"
+
+  # Záložní přístupový bod, pokud vypadne váš router
+  ap:
+    ssid: "AC-wifi-Airwell"
+    password: "slwf01pro"
+
+# Aktivace síťového vyhledávání pro SDG monitoring
+mdns:
+  disabled: false
+
+# Povolení webového rozhraní a HTTP rozhraní
+web_server:
+  port: 80
+  version: 2
+
+# Rozhraní API pro komunikaci v síti
+api:
+
+ota:
+  - platform: esphome
+
+# Podpora HTTP klient/server požadavků
+http_request:
+  user_agent: esphome/device
+  timeout: 10s
+
+# Spárování s vnitřní elektronikou klimatizace Airwell (Midea)
+uart:
+  tx_pin: GPIO11
+  rx_pin: GPIO3
+  baud_rate: 9600
+
+climate:
+  - platform: midea_ac
+    name: "Klimatizace"
+    id: airwell_ac
+    beeper: true
+
+# Virtuální spínač pro ovládání z SDG (spínatelný přes HTTP URL)
+switch:
+  - platform: template
+    name: "Shelly Rele Ovladani"
+    id: shelly_relay_0
+    optimistic: true
+    assumed_state: true
+    turn_on_action:
+      - climate.control:
+          id: airwell_ac
+          mode: COOL
+          target_temperature: 23 °C
+    turn_off_action:
+      - climate.control:
+          id: airwell_ac
+          mode: 'OFF'

@@ -1,53 +1,25 @@
 esphome:
-  name: smlight-ac
-  friendly_name: Klimatizace Airwell
+  name: ac-airwell-shelly
 
 esp8266:
   board: esp12e
 
+# Snížení logování pro úsporu RAM a CPU
+logger:
+  level: WARN
+
+# VYPNUTO pro úsporu paměti RAM:
+# web_server:
+#   port: 80
+
+# Nastavení Wi-Fi s primární sítí i záložním AP
 wifi:
-  ssid: "NÁZEV_VAŠÍ_WIFI"
-  password: "HESLO_VAŠÍ_WIFI"
+  ssid: "NAZEV_VASE_DOMACI_WIFI"
+  password: "HESLO_K_VASE_WIFI"
+
+  # Záložní síť pro případ změny routeru / ztráty signálu
   ap:
     ssid: "AC-wifi-Airwell"
     password: "slwf01pro"
 
-mdns:
-  disabled: false
-
-web_server:
-  port: 80
-  version: 2
-
-api:
-
-ota:
-  - platform: esphome
-
-# Hardware UART komunikace pro ESP8266
-uart:
-  tx_pin: GPIO1
-  rx_pin: GPIO3
-  baud_rate: 9600
-
-climate:
-  - platform: midea
-    name: "Klimatizace"
-    id: airwell_ac
-    beeper: true
-
-switch:
-  - platform: template
-    name: "Shelly Rele Ovladani"
-    id: shelly_relay_0
-    optimistic: true
-    assumed_state: true
-    turn_on_action:
-      - climate.control:
-          id: airwell_ac
-          mode: COOL
-          target_temperature: 23 °C
-    turn_off_action:
-      - climate.control:
-          id: airwell_ac
-          mode: 'OFF'
+# Ponechte vaši existující sekci pro ovládání klimatizace a Shelly emulaci...
